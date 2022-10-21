@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
   getStorage,
@@ -9,6 +8,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../firebase";
+import { API } from "../api/api";
 
 const Container = styled.div`
   width: 100%;
@@ -149,7 +149,7 @@ const Upload = ({ setOpen }) => {
   const handleUpload = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/videos", { ...inputs, tags });
+      const res = await API.post("/videos", { ...inputs, tags });
       setOpen(false);
       res.status === 200 && navigate(`/video/${res.data._id}`);
     } catch (error) {

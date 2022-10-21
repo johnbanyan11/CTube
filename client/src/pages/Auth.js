@@ -6,6 +6,7 @@ import { loginStart, loginSuccess, loginFailure } from "../app/userSlice";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { API } from "../api/api";
 
 const Container = styled.div`
   display: flex;
@@ -81,7 +82,7 @@ const Auth = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const res = await axios.post("/auth/signin", { name, password });
+      const res = await API.post("/auth/signin", { name, password });
       dispatch(loginSuccess(res.data));
       navigate("/");
     } catch (error) {
@@ -94,15 +95,13 @@ const Auth = () => {
     dispatch(loginStart());
     signInWithPopup(auth, provider)
       .then((result) => {
-        axios
-          .post("/auth/google", {
-            name: result.user.displayName,
-            email: result.user.email,
-            img: result.user.photoURL,
-          })
-          .then((res) => {
-            dispatch(loginSuccess(res.data));
-          });
+        API.post("/auth/google", {
+          name: result.user.displayName,
+          email: result.user.email,
+          img: result.user.photoURL,
+        }).then((res) => {
+          dispatch(loginSuccess(res.data));
+        });
       })
       .catch((error) => {
         dispatch(loginFailure());

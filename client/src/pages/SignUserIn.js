@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
@@ -6,6 +5,7 @@ import { loginStart, loginSuccess, loginFailure } from "../app/userSlice";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate, NavLink } from "react-router-dom";
+import { API } from "../api/api";
 
 const Container = styled.div`
   display: flex;
@@ -85,7 +85,7 @@ const SignUserIn = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const res = await axios.post("/auth/signin", { name, password });
+      const res = await API.post("/auth/signin", { name, password });
       dispatch(loginSuccess(res.data));
       res.status === 200 && navigate("/");
     } catch (error) {
@@ -98,15 +98,13 @@ const SignUserIn = () => {
     dispatch(loginStart());
     signInWithPopup(auth, provider)
       .then((result) => {
-        axios
-          .post("/auth/google", {
-            name: result.user.displayName,
-            email: result.user.email,
-            img: result.user.photoURL,
-          })
-          .then((res) => {
-            dispatch(loginSuccess(res.data));
-          });
+        API.post("/auth/google", {
+          name: result.user.displayName,
+          email: result.user.email,
+          img: result.user.photoURL,
+        }).then((res) => {
+          dispatch(loginSuccess(res.data));
+        });
       })
       .catch(() => {
         dispatch(loginFailure());

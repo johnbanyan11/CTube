@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Card from "./Card";
+import { API } from "../api/api";
 
 const Container = styled.div`
   display: flex;
@@ -16,7 +16,7 @@ const Search = () => {
 
   useEffect(() => {
     const fetchVideos = async () => {
-      const res = await axios.get(`/videos/search${query}`);
+      const res = await API.get(`/videos/search${query}`);
       setVideos(res.data);
     };
     fetchVideos();
