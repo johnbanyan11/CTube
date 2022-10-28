@@ -1,8 +1,7 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Card from "../components/Card";
-
-import { API } from "../api/api";
 
 const Container = styled.div`
   display: grid;
@@ -15,7 +14,7 @@ export const Home = ({ type }) => {
 
   useEffect(() => {
     const fetchVideos = async () => {
-      const randomVideos = await API.get(`/videos/${type}`);
+      const randomVideos = await axios.get(`/videos/${type}`);
       setVideos(randomVideos.data);
     };
     fetchVideos();

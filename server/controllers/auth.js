@@ -17,16 +17,6 @@ export const signup = async (req, res, next) => {
         return;
       }
     });
-    // newUser.markModified("password");
-    // const savedUser = await newUser.save();
-    // console.log(savedUser);
-    // newUser.save(function (err) {
-    //   if (err) {
-    //     console.log(err);
-    //     return;
-    //   }
-    //   console.log("processing..");
-    //   console.log(newUser);
     res.status(200).send("User has been created...");
     console.log("user saved");
     // });
@@ -44,8 +34,9 @@ export const signin = async (req, res, next) => {
     if (!isCorrect) return next(createError(400, "password mismatch..."));
 
     const token = jwt.sign({ id: user._id }, process.env.JWT);
+    console.log(token);
     const { password, ...others } = user._doc;
-
+    console.log(user._doc);
     res
       .cookie("access_token", token, {
         httpOnly: true,

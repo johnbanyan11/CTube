@@ -11,7 +11,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../firebase";
-import { API } from "../api/api";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -158,7 +158,7 @@ const SignUserUp = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      await API.post("/auth/signup", inputs);
+      await axios.post("/auth/signup", inputs);
       navigate("/signin");
     } catch (error) {
       dispatch(loginFailure());

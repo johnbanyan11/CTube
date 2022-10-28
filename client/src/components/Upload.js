@@ -8,7 +8,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../firebase";
-import { API } from "../api/api";
+import axios from "axios";
 
 const Container = styled.div`
   width: 100%;
@@ -110,7 +110,6 @@ const Upload = ({ setOpen }) => {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         urlType === "imgUrl"
@@ -149,7 +148,7 @@ const Upload = ({ setOpen }) => {
   const handleUpload = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post("/videos", { ...inputs, tags });
+      const res = await axios.post("/videos", { ...inputs, tags });
       setOpen(false);
       res.status === 200 && navigate(`/video/${res.data._id}`);
     } catch (error) {

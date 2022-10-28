@@ -70,7 +70,6 @@ const User = styled.div`
 const Avatar = styled.img`
   width: 32px;
   height: 32px;
-  /* padding-top: 15px; */
   border-radius: 50%;
   background-color: #999;
 `;

@@ -116,7 +116,6 @@ const Menu = ({ darkMode, setDarkMode }) => {
             CTube
           </Logo>
         </LogoBar>
-        {/* </Link> */}
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Item>
             <HomeOutlinedIcon />

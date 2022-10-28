@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Comment from "./Comment";
 import { useSelector } from "react-redux";
-import { API } from "../api/api";
+import axios from "axios";
 
 const Container = styled.div``;
 
@@ -53,7 +53,7 @@ const Comments = ({ videoId }) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const res = await API.get(`/comments/${videoId}`);
+        const res = await axios.get(`/comments/${videoId}`);
         setComments(res.data);
       } catch (error) {}
     };
@@ -67,7 +67,7 @@ const Comments = ({ videoId }) => {
     // console.log(videoId);
     e.preventDefault();
     try {
-      const newComment = await API.post("/comments", {
+      const newComment = await axios.post("/comments", {
         desc,
         userId,
         videoId,
