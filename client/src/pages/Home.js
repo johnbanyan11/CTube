@@ -1,7 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { API } from "../api/api";
 import Card from "../components/Card";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   display: grid;
@@ -11,10 +12,17 @@ const Container = styled.div`
 
 export const Home = ({ type }) => {
   const [videos, setVideos] = useState([]);
+  const { token } = useSelector((state) => state.user);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   useEffect(() => {
     const fetchVideos = async () => {
-      const randomVideos = await axios.get(`/videos/${type}`);
+      const randomVideos = await API.get(`/videos/${type}`, config);
       setVideos(randomVideos.data);
     };
     fetchVideos();

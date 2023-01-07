@@ -8,7 +8,8 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../firebase";
-import axios from "axios";
+import { API } from "../api/api";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   width: 100%;
@@ -88,6 +89,7 @@ const Upload = ({ setOpen }) => {
   const [imagePercentage, setImagePercentage] = useState(0);
   const [inputs, setInputs] = useState({});
   const [tags, setTags] = useState([]);
+  const { token } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
 
@@ -126,7 +128,9 @@ const Upload = ({ setOpen }) => {
             break;
         }
       },
-      (error) => {},
+      (error) => {
+        // console.log(error);
+      },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setInputs((prev) => {
@@ -145,14 +149,26 @@ const Upload = ({ setOpen }) => {
     image && UploadFile(image, "imgUrl");
   }, [image]);
 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+      tags,
+      ...inputs,
+    },
+  };
+
   const handleUpload = async (e) => {
     e.preventDefault();
+    // console.log(video, image);
+    // console.log(inputs);
     try {
-      const res = await axios.post("/videos", { ...inputs, tags });
+      const res = await API.post("/videos", config);
       setOpen(false);
       res.status === 200 && navigate(`/video/${res.data._id}`);
     } catch (error) {
-      console.error(error.response.data);
+      // console.error(error.response.data);
     }
   };
 

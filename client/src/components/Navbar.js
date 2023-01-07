@@ -35,6 +35,7 @@ const Search = styled.div`
   border: 1px solid #ccc;
   border-radius: 3px;
   color: ${({ theme }) => theme.text};
+  cursor: pointer;
 `;
 
 const Input = styled.input`
@@ -65,6 +66,7 @@ const User = styled.div`
   gap: 10px;
   font-weight: 500;
   color: ${({ theme }) => theme.text};
+  cursor: pointer;
 `;
 
 const Avatar = styled.img`
@@ -78,8 +80,14 @@ const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  console.log(currentUser);
 
   const navigate = useNavigate();
+
+  const handleVideoIconClick = () => {
+    navigate("/");
+    setOpen(!open);
+  };
 
   return (
     <>
@@ -96,7 +104,7 @@ const Navbar = () => {
           </Search>
           {currentUser ? (
             <User>
-              <VideoCallOutlinedIcon onClick={() => setOpen(!open)} />
+              <VideoCallOutlinedIcon onClick={handleVideoIconClick} />
               <Avatar src={currentUser.img} />
               {currentUser.name}
             </User>

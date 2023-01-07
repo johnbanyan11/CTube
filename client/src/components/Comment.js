@@ -1,7 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { format } from "timeago.js";
+import { API } from "../api/api";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   display: flex;
@@ -40,10 +41,18 @@ const Text = styled.span`
 
 const Comment = ({ comment }) => {
   const [channel, setChannel] = useState({});
+  const { token } = useSelector((state) => state.user);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   useEffect(() => {
     const fetchComment = async () => {
-      const res = await axios.get(`/users/find/${comment.userId}`);
+      // console.log(token);
+      const res = await API.get(`/users/find/${comment.userId}`, config);
       setChannel(res.data);
     };
     fetchComment();

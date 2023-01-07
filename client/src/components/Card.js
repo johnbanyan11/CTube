@@ -1,8 +1,10 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { format } from "timeago.js";
+import { API } from "../api/api";
+import { useDispatch } from "react-redux";
+import { incrementView } from "../app/videoSlice";
 
 const Container = styled.div`
   width: ${(props) => props.type !== "sm" && "355px"};
@@ -56,18 +58,30 @@ const Info = styled.div`
 
 const Card = ({ type, video }) => {
   const [channel, setChannel] = useState({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchChannel = async () => {
-      const res = await axios.get(`/users/find/${video.userId}`);
+      const res = await API.get(`/users/find/${video.userId}`);
       setChannel(res.data);
+      console.log(res.data);
+      console.log(video);
     };
     fetchChannel();
   }, [video.userId]);
 
+  const IncView = async () => {
+    try {
+      await API.put(`/videos/view/${video._id}`);
+      dispatch(incrementView(video._id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
-      <Container type={type}>
+      <Container type={type} onClick={IncView}>
         <Image type={type} src={video.imgUrl} />
         <Details type={type}>
           <ChannelImage type={type} src={channel.img} />

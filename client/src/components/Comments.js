@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Comment from "./Comment";
 import { useSelector } from "react-redux";
-import axios from "axios";
+import { API } from "../api/api";
 
 const Container = styled.div``;
 
@@ -46,6 +46,7 @@ const ValidateLikeDiv = styled.span`
 const Comments = ({ videoId }) => {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
+  const { token } = useSelector((state) => state.user);
 
   const [desc, setDesc] = useState("");
   const [comments, setComments] = useState([]);
@@ -53,7 +54,7 @@ const Comments = ({ videoId }) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const res = await axios.get(`/comments/${videoId}`);
+        const res = await API.get(`/comments/${videoId}`);
         setComments(res.data);
       } catch (error) {}
     };
@@ -66,12 +67,21 @@ const Comments = ({ videoId }) => {
     // console.log(userId);
     // console.log(videoId);
     e.preventDefault();
-    try {
-      const newComment = await axios.post("/comments", {
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
         desc,
         userId,
         videoId,
-      });
+      },
+    };
+
+    try {
+      // console.log(config);
+      const newComment = await API.post("/comments", config);
 
       if (newComment.status === 200) {
         setDesc("");

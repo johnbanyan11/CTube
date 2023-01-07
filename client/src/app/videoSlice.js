@@ -43,6 +43,9 @@ export const videoSlice = createSlice({
         );
       }
     },
+    incrementView: (state) => {
+      state.currentVideo.views++;
+    },
   },
 });
 
@@ -52,6 +55,7 @@ export const {
   fetchVideoFailure,
   likeVideo,
   dislikeVideo,
+  incrementView,
 } = videoSlice.actions;
 
 export default videoSlice.reducer;

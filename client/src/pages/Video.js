@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { format } from "timeago.js";
-import axios from "axios";
 
 import ThumbUpOffAltOutlinedIcon from "@mui/icons-material/ThumbUpOffAltOutlined";
 import ThumbDownAltOutlinedIcon from "@mui/icons-material/ThumbDownAltOutlined";
@@ -17,6 +16,7 @@ import Recommendations from "../components/Recommendations";
 
 import { dislikeVideo, fetchVideoSuccess, likeVideo } from "../app/videoSlice";
 import { subscription } from "../app/userSlice";
+import { API } from "../api/api";
 
 const Container = styled.div`
   display: flex;
@@ -134,6 +134,8 @@ const VideoFrame = styled.video`
 const Video = () => {
   const { currentVideo } = useSelector((state) => state.video);
   const { currentUser } = useSelector((state) => state.user);
+  const { token } = useSelector((state) => state.user);
+  // console.log(token);
 
   const dispatch = useDispatch();
 
@@ -144,8 +146,8 @@ const Video = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const videoRes = await axios.get(`/videos/find/${path}`);
-        const currentVideochannelRes = await axios.get(
+        const videoRes = await API.get(`/videos/find/${path}`);
+        const currentVideochannelRes = await API.get(
           `/users/find/${videoRes.data.userId}`
         );
         setCurrentVideoChannel(currentVideochannelRes.data);
@@ -155,26 +157,36 @@ const Video = () => {
     fetchData();
   }, [dispatch, path]);
 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const handleLike = async () => {
-    await axios.put(`/users/like/${currentVideo._id}`);
-    dispatch(likeVideo(currentUser._id));
+    try {
+      // console.log(config);
+      await API.put(`/users/like/${currentVideo._id}`, config);
+      dispatch(likeVideo(currentUser._id));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDislike = async () => {
-    console.log("called..");
-    await axios.put(`/users/dislike/${currentVideo._id}`);
+    await API.put(`/users/dislike/${currentVideo._id}`, config);
     dispatch(dislikeVideo(currentUser._id));
   };
 
   const handleSub = async () => {
     currentUser.subscribedUsers.includes(currentVideochannel._id)
-      ? await axios.put(`/users/unsub/${currentVideochannel._id}`)
-      : await axios.put(`/users/sub/${currentVideochannel._id}`);
+      ? await API.put(`/users/unsub/${currentVideochannel._id}`, config)
+      : await API.put(`/users/sub/${currentVideochannel._id}`, config);
     dispatch(subscription(currentVideochannel._id));
   };
 
-  console.log(currentUser);
-  console.log(currentVideo);
+  // console.log(currentUser.token);
+  // console.log(currentVideo);
 
   return (
     <Container>

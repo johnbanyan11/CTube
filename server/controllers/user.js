@@ -78,6 +78,7 @@ export const unsubscribe = async (req, res, next) => {
 
 // LIKE
 export const like = async (req, res, next) => {
+  console.log(req.body);
   const id = req.user.id;
   const videoId = req.params.videoId;
   try {
@@ -87,6 +88,7 @@ export const like = async (req, res, next) => {
     });
     res.status(200).json("video has been liked");
   } catch (error) {
+    // console.log(err);
     next(error);
   }
 };

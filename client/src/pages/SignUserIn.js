@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { loginStart, loginSuccess, loginFailure } from "../app/userSlice";
+import {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  storeToken,
+} from "../app/userSlice";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate, NavLink } from "react-router-dom";
-import axios from "axios";
+import { API } from "../api/api";
 
 const Container = styled.div`
   display: flex;
@@ -75,7 +80,7 @@ const SignUpWrapper = styled.div`
 `;
 
 const SignUserIn = () => {
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
@@ -85,9 +90,10 @@ const SignUserIn = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const res = await axios.post("/auth/signin", { name, password });
-      console.log(res);
-      dispatch(loginSuccess(res.data));
+      const res = await API.post("/auth/signin", { email, password });
+      // console.log(res);
+      dispatch(loginSuccess(res.data.others));
+      dispatch(storeToken(res.data.token));
       res.status === 200 && navigate("/");
     } catch (error) {
       console.error(error.response.data);
@@ -99,18 +105,19 @@ const SignUserIn = () => {
     dispatch(loginStart());
     signInWithPopup(auth, provider)
       .then((result) => {
-        axios
-          .post("/auth/google", {
-            name: result.user.displayName,
-            email: result.user.email,
-            img: result.user.photoURL,
-          })
-          .then((res) => {
-            dispatch(loginSuccess(res.data));
-          });
+        API.post("/auth/google", {
+          name: result.user.displayName,
+          email: result.user.email,
+          img: result.user.photoURL,
+        }).then((res) => {
+          dispatch(loginSuccess(res.data.user));
+          dispatch(storeToken(res.data.token));
+          console.log(res);
+        });
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch(loginFailure());
+        console.log(error);
       });
   };
 
@@ -119,10 +126,7 @@ const SignUserIn = () => {
       <Wrapper>
         <Title>Sign In</Title>
         <SubTitle>to continue to CTube</SubTitle>
-        <Input
-          placeholder="username"
-          onChange={(e) => setName(e.target.value)}
-        />
+        <Input placeholder="email" onChange={(e) => setEmail(e.target.value)} />
         <Input
           type="password"
           placeholder="password"
