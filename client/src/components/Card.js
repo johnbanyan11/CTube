@@ -64,8 +64,6 @@ const Card = ({ type, video }) => {
     const fetchChannel = async () => {
       const res = await API.get(`/users/find/${video.userId}`);
       setChannel(res.data);
-      console.log(res.data);
-      console.log(video);
     };
     fetchChannel();
   }, [video.userId]);
@@ -74,9 +72,7 @@ const Card = ({ type, video }) => {
     try {
       await API.put(`/videos/view/${video._id}`);
       dispatch(incrementView(video._id));
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

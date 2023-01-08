@@ -3,7 +3,6 @@ import Video from "../models/Video.js";
 import User from "../models/User.js";
 
 export const addVideo = async (req, res, next) => {
-  console.log(req.body);
   const newVideo = new Video({ userId: req.user.id, ...req.body.data });
   try {
     const savedVideo = await newVideo.save();
@@ -89,7 +88,6 @@ export const sub = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
     const subscribedChannels = user.subscribedUsers;
-    console.log(subscribedChannels);
 
     const list = await Promise.all(
       subscribedChannels.map((channelId) => {

@@ -64,8 +64,7 @@ const Comments = ({ videoId }) => {
   const handleUploadComment = async (e) => {
     const userId = currentVideo.userId;
     const videoId = currentVideo._id;
-    // console.log(userId);
-    // console.log(videoId);
+
     e.preventDefault();
 
     const config = {
@@ -80,16 +79,13 @@ const Comments = ({ videoId }) => {
     };
 
     try {
-      // console.log(config);
       const newComment = await API.post("/comments", config);
 
       if (newComment.status === 200) {
         setDesc("");
         setComments((oldComments) => [...oldComments, newComment.data]);
       }
-    } catch (error) {
-      console.error(error.response.data);
-    }
+    } catch (error) {}
   };
 
   const orderedComments = comments

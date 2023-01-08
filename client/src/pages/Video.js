@@ -135,7 +135,6 @@ const Video = () => {
   const { currentVideo } = useSelector((state) => state.video);
   const { currentUser } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.user);
-  // console.log(token);
 
   const dispatch = useDispatch();
 
@@ -165,12 +164,9 @@ const Video = () => {
 
   const handleLike = async () => {
     try {
-      // console.log(config);
       await API.put(`/users/like/${currentVideo._id}`, config);
       dispatch(likeVideo(currentUser._id));
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleDislike = async () => {
@@ -184,9 +180,6 @@ const Video = () => {
       : await API.put(`/users/sub/${currentVideochannel._id}`, config);
     dispatch(subscription(currentVideochannel._id));
   };
-
-  // console.log(currentUser.token);
-  // console.log(currentVideo);
 
   return (
     <Container>

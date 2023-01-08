@@ -80,7 +80,6 @@ const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  console.log(currentUser);
 
   const navigate = useNavigate();
 

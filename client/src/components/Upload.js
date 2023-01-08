@@ -128,9 +128,7 @@ const Upload = ({ setOpen }) => {
             break;
         }
       },
-      (error) => {
-        // console.log(error);
-      },
+      (error) => {},
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setInputs((prev) => {
@@ -161,15 +159,12 @@ const Upload = ({ setOpen }) => {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    // console.log(video, image);
-    // console.log(inputs);
+
     try {
       const res = await API.post("/videos", config);
       setOpen(false);
       res.status === 200 && navigate(`/video/${res.data._id}`);
-    } catch (error) {
-      // console.error(error.response.data);
-    }
+    } catch (error) {}
   };
 
   return (

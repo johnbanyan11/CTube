@@ -51,7 +51,6 @@ const Comment = ({ comment }) => {
 
   useEffect(() => {
     const fetchComment = async () => {
-      // console.log(token);
       const res = await API.get(`/users/find/${comment.userId}`, config);
       setChannel(res.data);
     };

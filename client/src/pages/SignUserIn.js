@@ -91,12 +91,10 @@ const SignUserIn = () => {
     dispatch(loginStart());
     try {
       const res = await API.post("/auth/signin", { email, password });
-      // console.log(res);
       dispatch(loginSuccess(res.data.others));
       dispatch(storeToken(res.data.token));
       res.status === 200 && navigate("/");
     } catch (error) {
-      console.error(error.response.data);
       dispatch(loginFailure());
     }
   };
@@ -112,12 +110,10 @@ const SignUserIn = () => {
         }).then((res) => {
           dispatch(loginSuccess(res.data.user));
           dispatch(storeToken(res.data.token));
-          console.log(res);
         });
       })
       .catch((error) => {
         dispatch(loginFailure());
-        console.log(error);
       });
   };
 
