@@ -31,7 +31,7 @@ const Content = styled.div`
 const VideoWrapper = styled.div``;
 
 const Title = styled.h1`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   margin-top: 20px;
   margin-bottom: 16px;

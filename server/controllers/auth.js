@@ -8,12 +8,13 @@ export const signup = async (req, res, next) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
     const newUser = new User({ ...req.body, password: hash });
-    await newUser.save(function (err) {
-      if (err) {
-        return;
-      }
-    });
-    res.status(200).send("User has been created...");
+    await newUser.save();
+    // console.log(newUser);
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT);
+    const { password, ...others } = newUser._doc;
+    res.status(200).json({ others, token });
+    console.log(others, token);
+    // res.status(200).send("User has been created...");
   } catch (error) {
     next(createError(404, "Invalid data..."));
   }
@@ -36,6 +37,7 @@ export const signin = async (req, res, next) => {
 };
 
 export const googleAuth = async (req, res, next) => {
+  console.log(req.body);
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {

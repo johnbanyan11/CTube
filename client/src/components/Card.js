@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { incrementView } from "../app/videoSlice";
 
 const Container = styled.div`
-  width: ${(props) => props.type !== "sm" && "355px"};
+  width: ${(props) => props.type !== "sm" && "320px"};
   margin-bottom: ${(props) => (props.type === "sm" ? "10px" : "45px")};
   cursor: pointer;
   display: ${(props) => props.type === "sm" && "flex"};
@@ -30,7 +30,7 @@ const Details = styled.div`
 `;
 
 const ChannelImage = styled.img`
-  width: 36px;
+  min-width: 36px;
   height: 36px;
   object-fit: contain;
   border-radius: 50%;
@@ -41,15 +41,15 @@ const ChannelImage = styled.img`
 const TextCon = styled.div``;
 
 const Title = styled.h1`
-  font-size: ${(props) => (props.type === "sm" ? "5px" : "16px")};
-  font-weight: ${(props) => (props.type === "sm" ? 300 : 800)};
+  font-size: ${(props) => (props.type === "sm" ? "5px" : "14px")};
+  font-weight: ${(props) => (props.type === "sm" ? 200 : 400)};
   color: ${({ theme }) => theme.text};
 `;
 
 const ChannelName = styled.h2`
   font-size: 14px;
   color: ${({ theme }) => theme.textSoft};
-  margin: 9px 0px;
+  margin: 6px 0px;
 `;
 const Info = styled.div`
   font-size: 14px;

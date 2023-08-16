@@ -30,7 +30,7 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  padding: 18px 26px;
+  padding: 18px 20px;
 `;
 
 const LogoBar = styled.div`

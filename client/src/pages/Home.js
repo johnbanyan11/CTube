@@ -21,12 +21,15 @@ export const Home = ({ type }) => {
   };
 
   useEffect(() => {
+    console.log("useEffect");
     const fetchVideos = async () => {
       const randomVideos = await API.get(`/videos/${type}`, config);
+      console.log(randomVideos);
       setVideos(randomVideos.data);
     };
     fetchVideos();
   }, [type]);
+  console.log(videos);
 
   return (
     <Container>

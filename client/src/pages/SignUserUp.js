@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { loginStart, loginFailure } from "../app/userSlice";
+import {
+  loginStart,
+  loginFailure,
+  loginSuccess,
+  storeToken,
+} from "../app/userSlice";
 import { useNavigate, NavLink } from "react-router-dom";
 
 import {
@@ -158,8 +163,10 @@ const SignUserUp = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      await API.post("/auth/signup", inputs);
-      navigate("/signin");
+      const res = await API.post("/auth/signup", inputs);
+      dispatch(loginSuccess(res.data.others));
+      dispatch(storeToken(res.data.token));
+      navigate("/");
     } catch (error) {
       dispatch(loginFailure());
     }

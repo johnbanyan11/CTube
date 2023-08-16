@@ -84,23 +84,6 @@ export const random = async (req, res, next) => {
   }
 };
 
-export const sub = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.user.id);
-    const subscribedChannels = user.subscribedUsers;
-
-    const list = await Promise.all(
-      subscribedChannels.map((channelId) => {
-        return Video.find({ userId: channelId });
-      })
-    );
-
-    res.status(200).json(list.flat().sort((a, b) => b.createdAt - a.createdAt));
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const getByTag = async (req, res, next) => {
   const tags = req.query.tags.split(",");
   try {
