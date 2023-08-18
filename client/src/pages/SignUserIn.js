@@ -109,7 +109,7 @@ const SignUserIn = () => {
           img: result.user.photoURL,
         }).then((res) => {
           console.log(res);
-          dispatch(loginSuccess(res.data.user));
+          dispatch(loginSuccess(res.data?.savedUser || res.data?.user));
           dispatch(storeToken(res.data.token));
           navigate("/");
         });

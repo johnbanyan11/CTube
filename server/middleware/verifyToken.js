@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { createError } from "../error.js";
 
 export const verifyToken = (req, res, next) => {
+  console.log("reee", req.body);
   if (
     req.body.headers.Authorization &&
     req.body.headers.Authorization.startsWith("Bearer")

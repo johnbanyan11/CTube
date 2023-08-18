@@ -231,6 +231,7 @@ const Upload = ({ setOpen }) => {
           onClick={(e) => {
             handleUpload(e);
           }}
+          disabled={(videoPercentage !== 100) & (imagePercentage !== 100)}
         >
           Upload
         </UploadButton>

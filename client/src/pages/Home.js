@@ -5,9 +5,9 @@ import Card from "../components/Card";
 import { useSelector } from "react-redux";
 
 const Container = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-column-gap: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 `;
 
 export const Home = ({ type }) => {

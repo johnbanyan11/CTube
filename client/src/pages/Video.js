@@ -14,7 +14,12 @@ import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import Comments from "../components/Comments";
 import Recommendations from "../components/Recommendations";
 
-import { dislikeVideo, fetchVideoSuccess, likeVideo } from "../app/videoSlice";
+import {
+  dislikeVideo,
+  fetchVideoSuccess,
+  incrementView,
+  likeVideo,
+} from "../app/videoSlice";
 import { subscription } from "../app/userSlice";
 import { API } from "../api/api";
 
@@ -156,10 +161,21 @@ const Video = () => {
     fetchData();
   }, [dispatch, path]);
 
+  useEffect(() => {
+    IncView();
+  }, []);
+
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  };
+
+  const IncView = async () => {
+    try {
+      await API.put(`/videos/view/${currentVideo._id}`);
+      dispatch(incrementView(currentVideo._id));
+    } catch (error) {}
   };
 
   const handleLike = async () => {
@@ -175,14 +191,15 @@ const Video = () => {
   };
 
   const handleSub = async () => {
+    dispatch(subscription(currentVideochannel._id));
     currentUser.subscribedUsers.includes(currentVideochannel._id)
       ? await API.put(`/users/unsub/${currentVideochannel._id}`, config)
       : await API.put(`/users/sub/${currentVideochannel._id}`, config);
-    dispatch(subscription(currentVideochannel._id));
   };
 
   return (
     <Container>
+      {/* {console.log("currentuser", currentUser)} */}
       {currentVideo && (
         <Content>
           <VideoWrapper>
@@ -229,7 +246,7 @@ const Video = () => {
               <ChannelDetails>
                 <ChannelName>{currentVideochannel.name}</ChannelName>
                 <ChannelCounter>
-                  {currentVideochannel.subscribers} Subscribers
+                  {currentUser.subscribers} Subscribers
                 </ChannelCounter>
                 <ChannelDescription>{currentVideo.desc}</ChannelDescription>
               </ChannelDetails>

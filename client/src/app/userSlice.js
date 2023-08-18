@@ -31,6 +31,11 @@ export const userSlice = createSlice({
       state.error = false;
     },
     subscription: (state, action) => {
+      console.log(
+        "sliceeeeeee",
+        action.payload,
+        state.currentUser.subscribedUsers.includes(action.payload)
+      );
       if (state.currentUser.subscribedUsers.includes(action.payload)) {
         state.currentUser.subscribedUsers.splice(
           state.currentUser.subscribedUsers.findIndex(
@@ -38,8 +43,12 @@ export const userSlice = createSlice({
           ),
           1
         );
+        if (state.currentUser.subscribers > 0) {
+          state.currentUser.subscribers--;
+        }
       } else {
         state.currentUser.subscribedUsers.push(action.payload);
+        state.currentUser.subscribers++;
       }
     },
   },
