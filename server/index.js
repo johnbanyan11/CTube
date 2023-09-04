@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import path from "path";
 
 import userRoutes from "./routes/users.js";
 import videoRoutes from "./routes/videos.js";
@@ -58,6 +59,21 @@ app.use((err, req, res, next) => {
     message,
   });
 });
+
+// --------------Deployement----------------//
+
+const __dirname1 = path.resolve();
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "/client/build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname1, "client", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running successfully");
+  });
+}
 
 const port = process.env.PORT;
 
