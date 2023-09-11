@@ -10,6 +10,7 @@ import Video from "./pages/Video";
 import Search from "./components/Search";
 import SignUserIn from "./pages/SignUserIn";
 import SignUserUp from "./pages/SignUserUp";
+import History from "./pages/History";
 
 const Container = styled.div`
   display: flex;
@@ -55,6 +56,7 @@ function App() {
                   <Route path="video">
                     <Route path=":id" element={<Video />} />
                   </Route>
+                  <Route path="history" element={<History />} />
                 </Route>
               </Routes>
             </Wrapper>

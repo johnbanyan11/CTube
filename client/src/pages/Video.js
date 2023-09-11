@@ -163,12 +163,22 @@ const Video = () => {
 
   useEffect(() => {
     IncView();
+    PushToHistory();
   }, []);
 
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  };
+
+  const PushToHistory = async () => {
+    try {
+      await API.post(`/history/${currentVideo._id}`, config);
+      //   dispatch(likeVideo(currentUser._id));
+    } catch (error) {
+      console.log("err", error);
+    }
   };
 
   const IncView = async () => {
